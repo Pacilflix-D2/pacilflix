@@ -1,7 +1,8 @@
+import EpisodeDetailModule from '@/modules/EpisodeDetailModule'
 import React from 'react'
 
 const EpisodeDetailPage = () => {
-  return <div>EpisodeDetailPage</div>
+  return <EpisodeDetailModule />
 }
 
 export default EpisodeDetailPage

@@ -1,7 +1,8 @@
+import ContributorModule from '@/modules/ContributorModule'
 import React from 'react'
 
 const ContributorPage = () => {
-  return <div>ContributorPage</div>
+  return <ContributorModule />
 }
 
 export default ContributorPage

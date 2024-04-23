@@ -1,7 +1,8 @@
 import React from 'react'
+import SubscriptionBuyModule from '@/modules/SubscriptionBuyModule'
 
 const BuySubscriptionPage = () => {
-  return <div>BuySubscriptionPage</div>
+  return <SubscriptionBuyModule />
 }
 
 export default BuySubscriptionPage

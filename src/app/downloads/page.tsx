@@ -1,7 +1,8 @@
+import DownloadsModule from '@/modules/DownloadsModule'
 import React from 'react'
 
-const DownloadPage = () => {
-  return <div>DownloadPage</div>
+const DownloadsPage = () => {
+  return <DownloadsModule />
 }
 
-export default DownloadPage
+export default DownloadsPage

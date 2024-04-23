@@ -1,7 +1,8 @@
+import FavoritesModule from '@/modules/FavoritesModule'
 import React from 'react'
 
-const FavoritePage = () => {
-  return <div>FavoritePage</div>
+const FavoritesPage = () => {
+  return <FavoritesModule />
 }
 
-export default FavoritePage
+export default FavoritesPage

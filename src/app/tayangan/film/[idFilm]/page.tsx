@@ -1,7 +1,8 @@
+import FilmDetailModule from '@/modules/FilmDetailModule'
 import React from 'react'
 
 const FilmDetailPage = () => {
-  return <div>FilmDetailPage</div>
+  return <FilmDetailModule />
 }
 
 export default FilmDetailPage
