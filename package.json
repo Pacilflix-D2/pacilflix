@@ -36,11 +36,14 @@
     "@radix-ui/react-toggle-group": "^1.0.4",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@tanstack/react-table": "^8.16.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "embla-carousel-autoplay": "^8.0.2",
     "embla-carousel-react": "^8.0.2",
     "input-otp": "^1.2.4",
-    "lucide-react": "^0.368.0",
+    "lucide-react": "^0.372.0",
     "next": "^14.1.0",
     "next-themes": "^0.3.0",
     "react": "^18",
@@ -69,7 +72,6 @@
     "husky": "^8.0.3",
     "postcss": "^8",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
