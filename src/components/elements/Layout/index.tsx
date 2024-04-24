@@ -11,7 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
     <ThemeContextProvider initialTheme="light">
       <Navbar />
       <Toaster />
-      <main>{children}</main>
+      <main className="min-h-screen">{children}</main>
       <Footer />
     </ThemeContextProvider>
   )

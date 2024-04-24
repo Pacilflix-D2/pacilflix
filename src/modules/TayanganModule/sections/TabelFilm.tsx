@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Table,
   TableBody,
@@ -8,15 +7,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { top10Films as series } from '@/components/constants/tayangan'
+import React from 'react'
+import { top10Films as films } from '@/components/constants/tayangan'
+import Link from 'next/link'
 
-const TabelSeries = () => {
+const TabelFilm = () => {
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
-      <h2 className="font-semibold text-3xl">Series</h2>
+      <h2 className="font-semibold text-3xl">Film</h2>
 
       <Table>
-        <TableCaption>Daftar Series Yang Tersedia.</TableCaption>
+        <TableCaption>Daftar Film Yang Tersedia.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Judul</TableHead>
@@ -26,7 +27,7 @@ const TabelSeries = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {series.map((film) => {
+          {films.map((film) => {
             const rilisDateObject = new Date(film.tanggalRilisTrailer)
             const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
               day: 'numeric',
@@ -38,7 +39,15 @@ const TabelSeries = () => {
               <TableRow key={film.id}>
                 <TableCell>{film.judul}</TableCell>
                 <TableCell>{film.sinopsisTrailer}</TableCell>
-                <TableCell>{film.urlTrailer}</TableCell>
+                <TableCell>
+                  <Link
+                    href={film.urlTrailer}
+                    target="_blank"
+                    className="hover:underline"
+                  >
+                    {film.urlTrailer}
+                  </Link>
+                </TableCell>
                 <TableCell>{rilisDate}</TableCell>
               </TableRow>
             )
@@ -49,4 +58,4 @@ const TabelSeries = () => {
   )
 }
 
-export default TabelSeries
+export default TabelFilm

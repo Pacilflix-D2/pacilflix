@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   Table,
   TableBody,
@@ -7,16 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import React from 'react'
-import { top10Films as films } from '@/components/constants/tayangan'
+import { top10Films as series } from '@/components/constants/tayangan'
+import Link from 'next/link'
 
-const TabelFilm = () => {
+const TabelSeries = () => {
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
-      <h2 className="font-semibold text-3xl">Film</h2>
+      <h2 className="font-semibold text-3xl">Series</h2>
 
       <Table>
-        <TableCaption>Daftar Film Yang Tersedia.</TableCaption>
+        <TableCaption>Daftar Series Yang Tersedia.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead>Judul</TableHead>
@@ -26,8 +27,8 @@ const TabelFilm = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {films.map((film) => {
-            const rilisDateObject = new Date(film.tanggalRilisTrailer)
+          {series.map((series) => {
+            const rilisDateObject = new Date(series.tanggalRilisTrailer)
             const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
               day: 'numeric',
               month: 'long',
@@ -35,10 +36,18 @@ const TabelFilm = () => {
             })
 
             return (
-              <TableRow key={film.id}>
-                <TableCell>{film.judul}</TableCell>
-                <TableCell>{film.sinopsisTrailer}</TableCell>
-                <TableCell>{film.urlTrailer}</TableCell>
+              <TableRow key={series.id}>
+                <TableCell>{series.judul}</TableCell>
+                <TableCell>{series.sinopsisTrailer}</TableCell>
+                <TableCell>
+                  <Link
+                    href={series.urlTrailer}
+                    target="_blank"
+                    className="hover:underline"
+                  >
+                    {series.urlTrailer}
+                  </Link>
+                </TableCell>
                 <TableCell>{rilisDate}</TableCell>
               </TableRow>
             )
@@ -49,4 +58,4 @@ const TabelFilm = () => {
   )
 }
 
-export default TabelFilm
+export default TabelSeries

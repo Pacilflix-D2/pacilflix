@@ -46,8 +46,8 @@ const Navbar = () => {
       <NavigationMenu>
         <NavigationMenuList className="flex items-center gap-3">
           <NavigationMenuItem>
-            <Link href="/trailer">
-              <NavigationMenuLink>Trailer</NavigationMenuLink>
+            <Link href="/">
+              <NavigationMenuLink>Home</NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
 
