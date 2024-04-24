@@ -14,6 +14,8 @@ import { NavLink } from './interface'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { useThemeContext } from '@/components/contexts/ThemeContext'
+import { Button } from '@/components/ui/button'
+import { useAuthContext } from '@/components/contexts/AuthContext'
 
 const Navbar = () => {
   const daftarNavList: NavLink[] = [
@@ -40,11 +42,12 @@ const Navbar = () => {
   ]
 
   const { theme, handleTheme } = useThemeContext()
+  const { isAuthenticated, login, logout } = useAuthContext()
 
   return (
     <div className="flex justify-between z-50 fixed w-[90%] left-1/2 -translate-x-1/2 top-2 p-4 bg-slate-500 bg-opacity-10 rounded-xl backdrop-blur-sm">
       <NavigationMenu>
-        <NavigationMenuList className="flex items-center gap-3">
+        <NavigationMenuList className="flex items-center gap-4">
           <NavigationMenuItem>
             <Link href="/">
               <NavigationMenuLink>Home</NavigationMenuLink>
@@ -82,13 +85,19 @@ const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div className="flex items-center space-x-2">
-        <Switch
-          id="theme-mode"
-          checked={theme == 'light'}
-          onClick={handleTheme}
-        />
-        <Label htmlFor="theme-mode">Theme</Label>
+      <div className="flex gap-4">
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="theme-mode"
+            checked={theme == 'light'}
+            onClick={handleTheme}
+          />
+          <Label htmlFor="theme-mode">Theme</Label>
+        </div>
+
+        <Button onClick={isAuthenticated ? logout : login}>
+          {isAuthenticated ? 'Logout' : 'Login'}
+        </Button>
       </div>
     </div>
   )

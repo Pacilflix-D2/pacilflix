@@ -10,8 +10,14 @@ import {
 } from '@/components/ui/table'
 import { top10Films as series } from '@/components/constants/tayangan'
 import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
+import { useAuthContext } from '@/components/contexts/AuthContext'
 
 const TabelSeries = () => {
+  const router = useRouter()
+  const { isAuthenticated } = useAuthContext()
+
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
       <h2 className="font-semibold text-3xl">Series</h2>
@@ -49,6 +55,17 @@ const TabelSeries = () => {
                   </Link>
                 </TableCell>
                 <TableCell>{rilisDate}</TableCell>
+                {isAuthenticated && (
+                  <TableCell>
+                    <Button
+                      onClick={() =>
+                        router.push(`/tayangan/series/${series.id}`)
+                      }
+                    >
+                      Detail Series
+                    </Button>
+                  </TableCell>
+                )}
               </TableRow>
             )
           })}

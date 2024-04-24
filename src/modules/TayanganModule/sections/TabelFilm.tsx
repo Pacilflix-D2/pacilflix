@@ -1,3 +1,4 @@
+'use client'
 import {
   Table,
   TableBody,
@@ -10,8 +11,14 @@ import {
 import React from 'react'
 import { top10Films as films } from '@/components/constants/tayangan'
 import Link from 'next/link'
+import { useAuthContext } from '@/components/contexts/AuthContext'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
 const TabelFilm = () => {
+  const router = useRouter()
+  const { isAuthenticated } = useAuthContext()
+
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
       <h2 className="font-semibold text-3xl">Film</h2>
@@ -24,6 +31,7 @@ const TabelFilm = () => {
             <TableHead>Sinopsis Trailer</TableHead>
             <TableHead>URL Trailer</TableHead>
             <TableHead>Tanggal Rilis Trailer</TableHead>
+            {isAuthenticated && <TableHead>Tayangan</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -49,6 +57,15 @@ const TabelFilm = () => {
                   </Link>
                 </TableCell>
                 <TableCell>{rilisDate}</TableCell>
+                {isAuthenticated && (
+                  <TableCell>
+                    <Button
+                      onClick={() => router.push(`/tayangan/film/${film.id}`)}
+                    >
+                      Detail Film
+                    </Button>
+                  </TableCell>
+                )}
               </TableRow>
             )
           })}

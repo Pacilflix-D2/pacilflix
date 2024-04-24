@@ -1,4 +1,7 @@
+'use client'
 import { top10Films } from '@/components/constants/tayangan'
+import { useAuthContext } from '@/components/contexts/AuthContext'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
@@ -11,8 +14,12 @@ import {
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const Top10Tayangan = () => {
+  const router = useRouter()
+  const { isAuthenticated } = useAuthContext()
+
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
       <h2 className="font-semibold text-3xl">Top 10 Tayangan</h2>
@@ -39,6 +46,7 @@ const Top10Tayangan = () => {
                 <TableHead>URL Trailer</TableHead>
                 <TableHead>Tanggal Rilis Trailer</TableHead>
                 <TableHead>Total View 7 Hari Terakhir</TableHead>
+                {isAuthenticated && <TableHead>Tayangan</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -68,6 +76,17 @@ const Top10Tayangan = () => {
                     </TableCell>
                     <TableCell>{rilisDate}</TableCell>
                     <TableCell>{film.totalView7HariTerakhir}</TableCell>
+                    {isAuthenticated && (
+                      <TableCell>
+                        <Button
+                          onClick={() =>
+                            router.push(`/tayangan/film/${film.id}`)
+                          }
+                        >
+                          Detail Film
+                        </Button>
+                      </TableCell>
+                    )}
                   </TableRow>
                 )
               })}
