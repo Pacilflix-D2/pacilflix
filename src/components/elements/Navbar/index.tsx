@@ -45,7 +45,7 @@ const Navbar = () => {
   const { isAuthenticated, login, logout } = useAuthContext()
 
   return (
-    <div className="flex justify-between z-50 fixed w-[90%] left-1/2 -translate-x-1/2 top-2 p-4 bg-slate-500 bg-opacity-10 rounded-xl backdrop-blur-sm">
+    <div className="flex justify-between z-50 fixed w-[90%] left-1/2 -translate-x-1/2 top-2 p-4 bg-slate-500 bg-opacity-10 rounded-xl backdrop-blur-md">
       <NavigationMenu>
         <NavigationMenuList className="flex items-center gap-4">
           <NavigationMenuItem>
