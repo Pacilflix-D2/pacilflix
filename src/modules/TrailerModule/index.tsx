@@ -15,12 +15,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/button'
 import { Search } from 'lucide-react'
 import { FormSchema } from './form'
+import Top10Tayangan from './sections/Top10Tayangan'
+import TabelFilm from './sections/TabelFilm'
+import TabelSeries from './sections/TabelSeries'
 
 const TrailerModule = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: '',
+      tayanganTitle: '',
     },
   })
 
@@ -31,13 +34,13 @@ const TrailerModule = () => {
   }
 
   return (
-    <main className="pt-28 grid grid-cols-1 gap-y-28">
+    <main className="py-28 grid grid-cols-1 gap-y-28">
       <div className="flex flex-col items-center gap-1">
         <h1 className="text-6xl font-bold">Daftar Tayangan.</h1>
         <p>Nobar. Bersama teman. Ciptakan kenangan.</p>
       </div>
 
-      <div>
+      <div className="grid grid-cols-1 gap-y-16">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -45,7 +48,7 @@ const TrailerModule = () => {
           >
             <FormField
               control={form.control}
-              name="username"
+              name="tayanganTitle"
               render={({ field }) => (
                 <FormItem className="min-w-[300px]">
                   <FormControl>
@@ -61,6 +64,12 @@ const TrailerModule = () => {
             </Button>
           </form>
         </Form>
+
+        <Top10Tayangan />
+
+        <TabelFilm />
+
+        <TabelSeries />
       </div>
     </main>
   )
