@@ -1,3 +1,4 @@
+'use client'
 import SeriesDetailModule from '@/modules/SeriesDetailModule'
 import React from 'react'
 

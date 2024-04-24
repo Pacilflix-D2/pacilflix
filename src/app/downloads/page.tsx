@@ -1,3 +1,4 @@
+'use client'
 import DownloadsModule from '@/modules/DownloadsModule'
 import React from 'react'
 

@@ -1,3 +1,4 @@
+'use client'
 import TayanganModule from '@/modules/TayanganModule'
 import React from 'react'
 

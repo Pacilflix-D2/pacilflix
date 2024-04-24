@@ -23,6 +23,19 @@ export const ThemeContextProvider: React.FC<ThemeContextProviderProps> = ({
   }
 
   useEffect(() => {
+    const localTheme = localStorage.getItem('theme')
+    if (localTheme !== null) {
+      setTheme(localTheme as ThemeType)
+    } else {
+      setTheme(
+        window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light'
+      )
+    }
+  }, [])
+
+  useEffect(() => {
     document
       .querySelector('html')
       ?.classList.add(theme === 'dark' ? 'dark' : 'light')

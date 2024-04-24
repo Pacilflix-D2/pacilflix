@@ -1,3 +1,4 @@
+'use client'
 import FilmDetailModule from '@/modules/FilmDetailModule'
 import React from 'react'
 

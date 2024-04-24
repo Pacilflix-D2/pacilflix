@@ -1,3 +1,4 @@
+'use client'
 import FavoritesModule from '@/modules/FavoritesModule'
 import React from 'react'
 

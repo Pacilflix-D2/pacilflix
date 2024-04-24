@@ -1,3 +1,4 @@
+'use client'
 import LoginModule from '@/modules/LoginModule'
 import React from 'react'
 

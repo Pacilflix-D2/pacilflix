@@ -1,3 +1,4 @@
+'use client'
 import TrailerModule from '@/modules/TrailerModule'
 import React from 'react'
 
