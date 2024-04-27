@@ -157,8 +157,8 @@ const FilmDetailModule = () => {
             <div>
               <strong>Pemain: </strong>
               <ul>
-                {film.actors.map((genre, index) => (
-                  <li key={index}>- {genre.nama}</li>
+                {film.actors.map((actor, index) => (
+                  <li key={index}>- {actor.nama}</li>
                 ))}
               </ul>
             </div>
@@ -166,8 +166,8 @@ const FilmDetailModule = () => {
             <div>
               <strong>Penulis Skenario: </strong>
               <ul>
-                {film.actors.map((genre, index) => (
-                  <li key={index}>- {genre.nama}</li>
+                {film.scenarioWriters.map((scenarioWriter, index) => (
+                  <li key={index}>- {scenarioWriter.nama}</li>
                 ))}
               </ul>
             </div>
