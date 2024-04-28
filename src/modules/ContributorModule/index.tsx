@@ -10,8 +10,10 @@ import {
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { contributors } from '@/components/constants/contributors'
+import { useAuthContext } from '@/components/contexts/AuthContext'
 
 const ContributorsPage = () => {
+  const { isAuthenticated } = useAuthContext()
   const [filterType, setFilterType] = useState('all-contributors')
 
   const filteredContributors =
@@ -20,6 +22,19 @@ const ContributorsPage = () => {
       : contributors.filter((contributor) =>
           contributor.tipe.includes(filterType)
         )
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <main className="py-28 grid grid-cols-1 gap-y-28"></main>
+        <div className="flex flex-col items-center gap-1">
+          <h2 className="text-6xl font-bold">
+            You need to log in to access this page.
+          </h2>
+        </div>
+      </>
+    )
+  }
 
   return (
     <main className="py-28 grid grid-cols-1 gap-y-28">
@@ -78,8 +93,6 @@ const ContributorsPage = () => {
               </TableBody>
             </Table>
           </TabsContent>
-
-          {/* Additional TabsContent for filtering if needed */}
         </Tabs>
       </div>
     </main>
