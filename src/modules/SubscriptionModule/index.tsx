@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import SubscriptionPurchaseSection from '@/modules/SubscriptionModule/sections/SubscriptionPurchaseSection'
+import { useAuthContext } from '@/components/contexts/AuthContext'
 
 const SubscriptionManagementPage = () => {
+  const { isAuthenticated } = useAuthContext()
   const [activeSubscriptions, setActiveSubscriptions] = useState([
     {
       name: 'Paket Basic',
@@ -72,6 +74,19 @@ const SubscriptionManagementPage = () => {
         .slice(0, 10),
     },
   ]
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <main className="py-28 grid grid-cols-1 gap-y-28"></main>
+        <div className="flex flex-col items-center gap-1">
+          <h2 className="text-6xl font-bold">
+            You need to log in to access this page.
+          </h2>
+        </div>
+      </>
+    )
+  }
 
   const renderActiveSubscriptions = () => {
     return (
