@@ -28,11 +28,15 @@ const Top10Tayangan = () => {
         defaultValue="top-10-global"
         className="min-w-[400px] w-full flex flex-col gap-4"
       >
-        <TabsList className="max-w-[400px] mx-auto grid w-full grid-cols-2">
+        <TabsList
+          className={`max-w-[400px] mx-auto grid w-full ${isAuthenticated ? 'grid-cols-2' : 'grid-cols-1'}`}
+        >
           <TabsTrigger value="top-10-global">Top 10 Global</TabsTrigger>
-          <TabsTrigger value="top-10-negara-pengguna">
-            Top 10 Negara Pengguna
-          </TabsTrigger>
+          {isAuthenticated && (
+            <TabsTrigger value="top-10-negara-pengguna">
+              Top 10 Negara Pengguna
+            </TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="top-10-global">
