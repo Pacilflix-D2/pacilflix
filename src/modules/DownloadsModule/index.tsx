@@ -1,39 +1,42 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Table,
+import React, { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import {
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow, } from '@/components/ui/table';
-import { useAuthContext } from '@/components/contexts/AuthContext';
-import { useRouter } from 'next/navigation';  
+  TableRow,
+} from '@/components/ui/table'
+import { useAuthContext } from '@/components/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
 
 const DummyDownloads = [
   { id: '1', title: 'Film A', downloadedAt: '2024-04-01 10:00:00' },
   { id: '2', title: 'Film B', downloadedAt: '2024-04-02 11:00:00' },
-];  
+]
 
 const DownloadsModule = () => {
-  const [downloads, setDownloads] = useState(DummyDownloads);
-  const {isAuthenticated, isLoading} = useAuthContext();
-  const router = useRouter();
+  const [downloads, setDownloads] = useState(DummyDownloads)
+  const { isAuthenticated, isLoading } = useAuthContext()
+  const router = useRouter()
 
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {
-      router.push("/");
+      router.push('/')
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, router])
 
   const handleDelete = (downloadId: string) => {
-    setDownloads(downloads.filter(download => download.id !== downloadId));
-  };
+    setDownloads(downloads.filter((download) => download.id !== downloadId))
+  }
 
   if (isLoading) {
     return (
       <main className="py-28 grid grid-cols-1 gap-y-15">
-        <p className='text-center mx-auto '>Loading...</p>
-      </main>)
+        <p className="text-center mx-auto ">Loading...</p>
+      </main>
+    )
   } else {
     return (
       <main className="py-28 grid grid-cols-1 gap-y-15">
@@ -69,10 +72,10 @@ const DownloadsModule = () => {
               )}
             </TableBody>
           </Table>
-        </div>  
-      </main>  
-    );
+        </div>
+      </main>
+    )
   }
-};
+}
 
-export default DownloadsModule;
+export default DownloadsModule
