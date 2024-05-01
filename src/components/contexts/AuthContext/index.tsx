@@ -9,6 +9,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   children,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
+  const [isLoading,setIsLoading] = useState<boolean>(true)
 
   async function login() {
     setIsAuthenticated(true)
@@ -21,6 +22,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   }
 
   useEffect(() => {
+    setIsLoading(true)
     const isAuthenticatedLocalStorage =
       window.localStorage.getItem('isAuthenticated')
 
@@ -30,11 +32,13 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     } else {
       setIsAuthenticated(JSON.parse(isAuthenticatedLocalStorage))
     }
+    setIsLoading(false)
   }, [])
 
   const contextValue = {
     isAuthenticated,
     setIsAuthenticated,
+    isLoading,
     login,
     logout,
   }
