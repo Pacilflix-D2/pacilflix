@@ -7,6 +7,7 @@ export interface AuthContextProviderProps {
 export interface AuthContextInterface {
   isAuthenticated: boolean
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
+  isLoading: boolean
   login: () => void
   logout: () => void
 }
