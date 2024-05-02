@@ -35,7 +35,8 @@ const EpisodeDetailModule = () => {
       ],
       sinopsis: 'Sinopsis of Episode 1',
       durasiEpisode: 60,
-      urlEpisode: '/episode-1',
+      urlEpisode:
+        'https://www.youtube.com/watch?v=dQw4w9WgXcQ&pp=ygUjcmljayBhc3RsZXkgbmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXA%3D',
       tanggalRilisEpisode: new Date('2024-05-01'),
     }
 
