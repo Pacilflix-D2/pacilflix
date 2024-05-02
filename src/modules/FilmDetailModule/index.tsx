@@ -1,6 +1,14 @@
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 export interface Genre {
   nama: string
@@ -102,8 +110,39 @@ const FilmDetailModule = () => {
 
         <div className="flex justify-center gap-2">
           <Button>Tonton Film</Button>
-          <Button>Unduh Tayangan</Button>
-          <Button>Tambah Favorit</Button>
+
+          <Dialog>
+            <DialogTrigger>
+              <Button>Unduh Tayangan</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Sukses Mengunduh Tayangan!</DialogTitle>
+                <DialogDescription>
+                  Selamat! Anda telah berhasil mengunduh {film?.judul} dan akan
+                  berlaku hingga 9 Mei 2004. Cek informasi selengkapnya pada
+                  halaman daftar unduhan.
+                </DialogDescription>
+              </DialogHeader>
+
+              <Button>Tombol Menuju Daftar Unduhan</Button>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog>
+            <DialogTrigger>
+              <Button>Tambah Favorit</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Konfirmasi</DialogTitle>
+                <DialogDescription>
+                  Apakah kamu ingin menambah ke daftar favorit?
+                </DialogDescription>
+                <Button>Tambahkan ke Favorit</Button>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
