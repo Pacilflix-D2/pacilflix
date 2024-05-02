@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
 
 const SubscriptionBuyModule = ({
   selectedPackage,
@@ -40,45 +41,45 @@ const SubscriptionBuyModule = ({
   return (
     <div>
       <h2 className="text-black">Beli {selectedPackage.name}</h2>
-      <table className="w-full border-collapse">
-        <tbody>
-          <tr>
-            <td className="border border-gray-400 px-4 py-2 w-1/4 bg-gray-800 text-black">
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell className="border border-gray-400 px-4 py-2 w-1/4 bg-gray-800 text-black">
               Nama Paket
-            </td>
-            <td className="border border-gray-400 px-4 py-2">
+            </TableCell>
+            <TableCell className="border border-gray-400 px-4 py-2">
               {selectedPackage.name}
-            </td>
-          </tr>
-          <tr>
-            <td className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
               Harga
-            </td>
-            <td className="border border-gray-400 px-4 py-2">
+            </TableCell>
+            <TableCell className="border border-gray-400 px-4 py-2">
               {selectedPackage.price}
-            </td>
-          </tr>
-          <tr>
-            <td className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
               Resolusi Layar
-            </td>
-            <td className="border border-gray-400 px-4 py-2">
+            </TableCell>
+            <TableCell className="border border-gray-400 px-4 py-2">
               {selectedPackage.resolution}
-            </td>
-          </tr>
-          <tr>
-            <td className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
               Dukungan Perangkat
-            </td>
-            <td className="border border-gray-400 px-4 py-2">
+            </TableCell>
+            <TableCell className="border border-gray-400 px-4 py-2">
               {selectedPackage.supportedDevices.join(', ')}
-            </td>
-          </tr>
-          <tr>
-            <td className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="border border-gray-400 px-4 py-2 bg-gray-800 text-black">
               Metode Pembayaran
-            </td>
-            <td className="border border-gray-400 px-4 py-2">
+            </TableCell>
+            <TableCell className="border border-gray-400 px-4 py-2">
               <select
                 value={selectedPaymentMethod}
                 onChange={handlePaymentMethodChange}
@@ -89,10 +90,10 @@ const SubscriptionBuyModule = ({
                 <option value="Kartu Kredit">Kartu Kredit</option>
                 <option value="E-Wallet">E-Wallet</option>
               </select>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
       <button
         onClick={handleBayarClick}
         className="bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded"

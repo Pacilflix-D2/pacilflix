@@ -1,6 +1,15 @@
 import React, { useState } from 'react'
 import SubscriptionPurchaseSection from '@/modules/SubscriptionModule/sections/SubscriptionPurchaseSection'
 import { useAuthContext } from '@/components/contexts/AuthContext'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 
 const SubscriptionManagementPage = () => {
   const { isAuthenticated } = useAuthContext()
@@ -92,109 +101,65 @@ const SubscriptionManagementPage = () => {
     return (
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">Paket Langganan Aktif</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-400 px-4 py-2">Nama</th>
-              <th className="border border-gray-400 px-4 py-2">Harga</th>
-              <th className="border border-gray-400 px-4 py-2">
-                Resolusi Layar
-              </th>
-              <th className="border border-gray-400 px-4 py-2">
-                Dukungan Perangkat
-              </th>
-              <th className="border border-gray-400 px-4 py-2">
-                Tanggal Mulai
-              </th>
-              <th className="border border-gray-400 px-4 py-2">
-                Tanggal Berakhir
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table>
+          <TableCaption>Daftar Paket Langganan Aktif.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nama</TableHead>
+              <TableHead>Harga</TableHead>
+              <TableHead>Resolusi Layar</TableHead>
+              <TableHead>Dukungan Perangkat</TableHead>
+              <TableHead>Tanggal Mulai</TableHead>
+              <TableHead>Tanggal Berakhir</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {activeSubscriptions.map((subscription, index) => (
-              <tr key={index}>
-                <td className="border border-gray-400 px-4 py-2">
-                  {subscription.name}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {subscription.price}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {subscription.resolution}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
+              <TableRow key={index}>
+                <TableCell>{subscription.name}</TableCell>
+                <TableCell>{subscription.price}</TableCell>
+                <TableCell>{subscription.resolution}</TableCell>
+                <TableCell>
                   {subscription.supportedDevices.join(', ')}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {subscription.startDate}
-                </td>
-                <td className="border border-gray-400 px-4 py-2">
-                  {subscription.endDate}
-                </td>
-              </tr>
+                </TableCell>
+                <TableCell>{subscription.startDate}</TableCell>
+                <TableCell>{subscription.endDate}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     )
   }
+
   const renderTransactionHistory = () => {
     return (
       <div className="mb-8">
-        <table className="w-full border-collapse">
-          <div className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">Riwayat Transaksi</h2>
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="border border-gray-400 px-4 py-2">
-                    Nama Paket
-                  </th>
-                  <th className="border border-gray-400 px-4 py-2">
-                    Tanggal Mulai
-                  </th>
-                  <th className="border border-gray-400 px-4 py-2">
-                    Tanggal Berakhir
-                  </th>
-                  <th className="border border-gray-400 px-4 py-2">
-                    Metode Pembayaran
-                  </th>
-                  <th className="border border-gray-400 px-4 py-2">
-                    Tanggal Pembayaran
-                  </th>
-                  <th className="border border-gray-400 px-4 py-2">
-                    Total Pembayaran
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {transactionHistory.map((transaction, index) => (
-                  <tr key={index}>
-                    <td className="border border-gray-400 px-4 py-2">
-                      {transaction.packageName}
-                    </td>
-                    <td className="border border-gray-400 px-4 py-2">
-                      {transaction.startDate}
-                    </td>
-                    <td className="border border-gray-400 px-4 py-2">
-                      {transaction.endDate}
-                    </td>
-                    <td className="border border-gray-400 px-4 py-2">
-                      {transaction.paymentMethod}
-                    </td>
-                    <td className="border border-gray-400 px-4 py-2">
-                      {transaction.paymentDate}
-                    </td>
-                    <td className="border border-gray-400 px-4 py-2">
-                      {transaction.totalPayment}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </table>
+        <Table>
+          <TableCaption>Riwayat Transaksi.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nama Paket</TableHead>
+              <TableHead>Tanggal Mulai</TableHead>
+              <TableHead>Tanggal Berakhir</TableHead>
+              <TableHead>Metode Pembayaran</TableHead>
+              <TableHead>Tanggal Pembayaran</TableHead>
+              <TableHead>Total Pembayaran</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {transactionHistory.map((transaction, index) => (
+              <TableRow key={index}>
+                <TableCell>{transaction.packageName}</TableCell>
+                <TableCell>{transaction.startDate}</TableCell>
+                <TableCell>{transaction.endDate}</TableCell>
+                <TableCell>{transaction.paymentMethod}</TableCell>
+                <TableCell>{transaction.paymentDate}</TableCell>
+                <TableCell>{transaction.totalPayment}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     )
   }

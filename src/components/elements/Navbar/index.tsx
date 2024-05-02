@@ -94,12 +94,12 @@ const Navbar = () => {
           />
           <Label htmlFor="theme-mode">Theme</Label>
         </div>
-        
+
         <Link href="/login">
           <Button onClick={isAuthenticated ? logout : login}>
             {isAuthenticated ? 'Logout' : 'Login'}
           </Button>
-        </Link>  
+        </Link>
       </div>
     </div>
   )
