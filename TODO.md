@@ -15,3 +15,5 @@ TODO:
 
 - integ get daftar unduh
 - integ hapus daftar unduh
+
+- integ detail episode
