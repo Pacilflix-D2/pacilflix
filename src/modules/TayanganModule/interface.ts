@@ -1,4 +1,4 @@
-export interface Movie {
+export interface Tayangan {
   id: string
   judul: string
   sinopsis: string
