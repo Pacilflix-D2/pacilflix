@@ -9,98 +9,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-
-export interface Genre {
-  nama: string
-}
-
-export interface Actor {
-  nama: string
-}
-
-export interface ScenarioWriter {
-  nama: string
-}
-
-export interface Review {
-  username: string
-  comment: string
-  rating: number
-}
-
-export interface Film {
-  judul: string
-  totalView: string
-  ratingAvg: number
-  sinopsis: string
-  durasi: number
-  tanggalRilisFilm: string
-  urlFilm: string
-  genres: Genre[]
-  asalNegara: string
-  actors: Actor[]
-  scenarioWriters: ScenarioWriter[]
-  sutradara: string
-  reviews: Review[]
-}
+import { useAuthContext } from '@/components/contexts/AuthContext'
+import { FilmDetails, Review } from './interface'
 
 const FilmDetailModule = () => {
   const params = useParams<{ idFilm: string }>()
-  const [film, setFilm] = useState<Film | null>(null)
+  const [film, setFilm] = useState<FilmDetails | null>(null)
+  const [reviews, setReviews] = useState<Review[] | null>(null)
+  const { customFetch, isAuthenticated } = useAuthContext()
 
   useEffect(() => {
-    console.log(params)
+    customFetch<FilmDetails>(`/api/film/${params.idFilm}/`, {
+      isAuthorized: isAuthenticated,
+    }).then((response) => setFilm(response.data))
 
-    // Dummy data for Genre interface
-    const dummyGenres: Genre[] = [
-      { nama: 'Action' },
-      { nama: 'Comedy' },
-      { nama: 'Drama' },
-    ]
-
-    // Dummy data for Actor interface
-    const dummyActors: Actor[] = [
-      { nama: 'John Doe' },
-      { nama: 'Jane Smith' },
-      { nama: 'Michael Johnson' },
-    ]
-
-    // Dummy data for ScenarioWriter interface
-    const dummyScenarioWriters: ScenarioWriter[] = [
-      { nama: 'David Brown' },
-      { nama: 'Sarah Taylor' },
-      { nama: 'Chris Evans' },
-    ]
-
-    // Dummy data for Review interface
-    const dummyReviews: Review[] = [
-      { username: 'user1', comment: 'Great movie!', rating: 4.5 },
-      {
-        username: 'user2',
-        comment: 'Awesome performance by the actors.',
-        rating: 5,
-      },
-      { username: 'user3', comment: 'Loved the plot twists.', rating: 4 },
-    ]
-
-    // Dummy data for Film interface
-    const dummyFilm: Film = {
-      judul: 'Dummy Film',
-      totalView: '1000000', // Dummy total views
-      ratingAvg: 4.3, // Dummy average rating
-      sinopsis: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', // Dummy synopsis
-      durasi: 120, // Dummy duration in minutes
-      tanggalRilisFilm: '2024-04-27', // Dummy release date
-      urlFilm: 'http://example.com/dummyfilm', // Dummy URL
-      genres: dummyGenres, // Using dummy genres data
-      asalNegara: 'United States', // Dummy country of origin
-      actors: dummyActors, // Using dummy actors data
-      scenarioWriters: dummyScenarioWriters, // Using dummy scenario writers data
-      sutradara: 'Christopher Nolan', // Dummy director
-      reviews: dummyReviews, // Using dummy reviews data
-    }
-
-    setFilm(dummyFilm)
+    customFetch<Review[]>(`/api/film/${params.idFilm}/reviews/`, {
+      isAuthorized: isAuthenticated,
+    }).then((response) => setReviews(response.data))
   }, [params])
 
   return (
@@ -151,12 +76,12 @@ const FilmDetailModule = () => {
           <section className="w-[95%] max-w-[1000px] mx-auto flex flex-col gap-4">
             <div>
               <strong>Total View: </strong>
-              {film.totalView}
+              {film.total_views}
             </div>
 
             <div>
               <strong>Rating Rata-Rata: </strong>
-              {film.ratingAvg}
+              {film.rating_avg}
             </div>
 
             <div>
@@ -166,38 +91,38 @@ const FilmDetailModule = () => {
 
             <div>
               <strong>Durasi Film: </strong>
-              {film.durasi}
+              {film.durasi_film}
             </div>
 
             <div>
               <strong>Tanggal Rilis Film: </strong>
-              {film.tanggalRilisFilm}
+              {film.release_date_film}
             </div>
 
             <div>
               <strong>URL Film: </strong>
-              {film.urlFilm}
+              {film.url_video_film}
             </div>
 
             <div>
               <strong>Genre: </strong>
               <ul>
                 {film.genres.map((genre, index) => (
-                  <li key={index}>- {genre.nama}</li>
+                  <li key={index}>- {genre.genre}</li>
                 ))}
               </ul>
             </div>
 
             <div>
               <strong>Asal Negara: </strong>
-              {film.asalNegara}
+              {film.asal_negara}
             </div>
 
             <div>
               <strong>Pemain: </strong>
               <ul>
-                {film.actors.map((actor, index) => (
-                  <li key={index}>- {actor.nama}</li>
+                {film.players.map((player, index) => (
+                  <li key={index}>- {player.nama}</li>
                 ))}
               </ul>
             </div>
@@ -205,7 +130,7 @@ const FilmDetailModule = () => {
             <div>
               <strong>Penulis Skenario: </strong>
               <ul>
-                {film.scenarioWriters.map((scenarioWriter, index) => (
+                {film.writers.map((scenarioWriter, index) => (
                   <li key={index}>- {scenarioWriter.nama}</li>
                 ))}
               </ul>
@@ -213,26 +138,27 @@ const FilmDetailModule = () => {
 
             <div>
               <strong>Sutradara: </strong>
-              {film.asalNegara}
+              {film.sutradara.nama}
             </div>
           </section>
 
           <section className="w-[95%] max-w-[1000px] mx-auto flex flex-col gap-4">
             <h2 className="font-bold text-2xl">Review</h2>
 
-            {film.reviews.map((review, index) => {
-              return (
-                <div
-                  key={index}
-                  className="bg-accent rounded-md p-4 flex flex-col gap-1"
-                >
-                  <h3>
-                    <strong>{review.username}</strong> | {review.rating}/10
-                  </h3>
-                  <p>{review.comment}</p>
-                </div>
-              )
-            })}
+            {reviews &&
+              reviews.map((review, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="bg-accent rounded-md p-4 flex flex-col gap-1"
+                  >
+                    <h3>
+                      <strong>{review.username}</strong> | {review.rating}/10
+                    </h3>
+                    <p>{review.deskripsi}</p>
+                  </div>
+                )
+              })}
           </section>
         </>
       )}
