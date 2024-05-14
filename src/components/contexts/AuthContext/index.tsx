@@ -92,7 +92,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     if (!isAuthenticatedLocalStorage) {
       setIsAuthenticated(false)
     } else {
-      setIsAuthenticated(JSON.parse(isAuthenticatedLocalStorage))
+      setIsAuthenticated(true)
     }
     setIsLoading(false)
   }, [router])
