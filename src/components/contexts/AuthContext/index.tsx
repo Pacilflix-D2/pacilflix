@@ -48,6 +48,10 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       localStorage.removeItem('token')
     }
 
+    if (!result.success) {
+      throw new Error(result.message)
+    }
+
     return result
   }
 

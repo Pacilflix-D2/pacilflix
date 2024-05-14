@@ -1,5 +1,4 @@
 'use client'
-import { top10Films } from '@/components/constants/tayangan'
 import { useAuthContext } from '@/components/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -15,10 +14,19 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { Movie } from '../interface'
 
 const Top10Tayangan = () => {
   const router = useRouter()
-  const { isAuthenticated } = useAuthContext()
+  const { isAuthenticated, customFetch } = useAuthContext()
+  const [top10Films, setTop10Films] = useState<Movie[] | null>(null)
+
+  useEffect(() => {
+    customFetch<Movie[]>('/api/shows/top-10/', {
+      isAuthorized: isAuthenticated,
+    }).then((response) => setTop10Films(response.data))
+  }, [])
 
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
@@ -54,46 +62,48 @@ const Top10Tayangan = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {top10Films.map((film) => {
-                const rilisDateObject = new Date(film.tanggalRilisTrailer)
-                const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })
+              {top10Films &&
+                top10Films.map((film, index) => {
+                  const rilisDateObject = new Date(film.release_date_trailer)
+                  const rilisDate = rilisDateObject.toLocaleDateString(
+                    'id-ID',
+                    {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    }
+                  )
 
-                return (
-                  <TableRow key={film.id}>
-                    <TableCell className="font-medium">
-                      {film.peringkat}
-                    </TableCell>
-                    <TableCell>{film.judul}</TableCell>
-                    <TableCell>{film.sinopsisTrailer}</TableCell>
-                    <TableCell>
-                      <Link
-                        href={film.urlTrailer}
-                        target="_blank"
-                        className="hover:underline"
-                      >
-                        {film.urlTrailer}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{rilisDate}</TableCell>
-                    <TableCell>{film.totalView7HariTerakhir}</TableCell>
-                    {isAuthenticated && (
+                  return (
+                    <TableRow key={film.id}>
+                      <TableCell className="font-medium">{index + 1}</TableCell>
+                      <TableCell>{film.judul}</TableCell>
+                      <TableCell>{film.sinopsis_trailer}</TableCell>
                       <TableCell>
-                        <Button
-                          onClick={() =>
-                            router.push(`/tayangan/film/${film.id}`)
-                          }
+                        <Link
+                          href={film.url_video_trailer}
+                          target="_blank"
+                          className="hover:underline"
                         >
-                          Detail Film
-                        </Button>
+                          {film.url_video_trailer}
+                        </Link>
                       </TableCell>
-                    )}
-                  </TableRow>
-                )
-              })}
+                      <TableCell>{rilisDate}</TableCell>
+                      <TableCell>{film.total_views}</TableCell>
+                      {isAuthenticated && (
+                        <TableCell>
+                          <Button
+                            onClick={() =>
+                              router.push(`/tayangan/film/${film.id}`)
+                            }
+                          >
+                            Detail Film
+                          </Button>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  )
+                })}
             </TableBody>
           </Table>
         </TabsContent>
