@@ -20,7 +20,7 @@ const TabelSeries = () => {
   const [series, setSeries] = useState<Series[] | null>(null)
 
   useEffect(() => {
-    customFetch<Series[]>('/api/film/').then((response) =>
+    customFetch<Series[]>('/api/series/').then((response) =>
       setSeries(response.data)
     )
   }, [])

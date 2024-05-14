@@ -13,11 +13,11 @@ const SeriesDetailModule = () => {
   const { customFetch, isAuthenticated } = useAuthContext()
 
   useEffect(() => {
-    customFetch<SeriesDetails>(`/api/film/${idSeries}/`, {
+    customFetch<SeriesDetails>(`/api/series/${idSeries}/`, {
       isAuthorized: isAuthenticated,
     }).then((response) => setSeries(response.data))
 
-    customFetch<Review[]>(`/api/film/${idSeries}/reviews/`, {
+    customFetch<Review[]>(`/api/series/${idSeries}/reviews/`, {
       isAuthorized: isAuthenticated,
     }).then((response) => setReviews(response.data))
   }, [])
