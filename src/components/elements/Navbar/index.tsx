@@ -42,7 +42,7 @@ const Navbar = () => {
   ]
 
   const { theme, handleTheme } = useThemeContext()
-  const { isAuthenticated, login, logout } = useAuthContext()
+  const { isAuthenticated, logout } = useAuthContext()
 
   return (
     <div className="flex justify-between z-50 fixed w-[90%] left-1/2 -translate-x-1/2 top-2 p-4 bg-slate-500 bg-opacity-10 rounded-xl backdrop-blur-md">
@@ -95,11 +95,13 @@ const Navbar = () => {
           <Label htmlFor="theme-mode">Theme</Label>
         </div>
 
-        <Link href="/login">
-          <Button onClick={isAuthenticated ? logout : login}>
-            {isAuthenticated ? 'Logout' : 'Login'}
-          </Button>
-        </Link>
+        {!isAuthenticated && (
+          <Link href="/login">
+            <Button>Login</Button>
+          </Link>
+        )}
+
+        {isAuthenticated && <Button onClick={logout}>Logout</Button>}
       </div>
     </div>
   )
