@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { LoginFormData } from './interface'
 import { Button } from '@/components/ui/button'
 import {
@@ -8,12 +8,17 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useAuthContext } from '@/components/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
 
 const LoginPage: React.FC = () => {
+  const { login, isAuthenticated } = useAuthContext()
   const [formData, setFormData] = useState<LoginFormData>({
     username: '',
     password: '',
   })
+
+  const router = useRouter()
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -24,8 +29,14 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Login attempt with:', formData)
+    login(formData)
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/tayangan')
+    }
+  }, [])
 
   return (
     <main className="py-28 flex justify-center items-center">
@@ -34,7 +45,7 @@ const LoginPage: React.FC = () => {
           <CardTitle>Login</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleLogin} className="dark:text-black">
             <div className="mb-6">
               <label htmlFor="username" className="block mb-2">
                 Username:
