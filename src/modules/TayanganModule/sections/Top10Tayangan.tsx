@@ -23,9 +23,9 @@ const Top10Tayangan = () => {
   const [top10Films, setTop10Films] = useState<Movie[] | null>(null)
 
   useEffect(() => {
-    customFetch<Movie[]>('/api/shows/top-10/', {
-      isAuthorized: isAuthenticated,
-    }).then((response) => setTop10Films(response.data))
+    customFetch<Movie[]>('/api/shows/top-10/').then((response) =>
+      setTop10Films(response.data)
+    )
   }, [])
 
   return (

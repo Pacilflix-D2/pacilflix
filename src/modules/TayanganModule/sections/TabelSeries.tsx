@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -8,15 +8,22 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { top10Films as series } from '@/components/constants/tayangan'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useAuthContext } from '@/components/contexts/AuthContext'
+import { Series } from '../interface'
 
 const TabelSeries = () => {
   const router = useRouter()
-  const { isAuthenticated } = useAuthContext()
+  const { isAuthenticated, customFetch } = useAuthContext()
+  const [series, setSeries] = useState<Series[] | null>(null)
+
+  useEffect(() => {
+    customFetch<Series[]>('/api/film/').then((response) =>
+      setSeries(response.data)
+    )
+  }, [])
 
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
@@ -33,42 +40,43 @@ const TabelSeries = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {series.map((series) => {
-            const rilisDateObject = new Date(series.tanggalRilisTrailer)
-            const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })
+          {series &&
+            series.map((series) => {
+              const rilisDateObject = new Date(series.release_date_trailer)
+              const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
 
-            return (
-              <TableRow key={series.id}>
-                <TableCell>{series.judul}</TableCell>
-                <TableCell>{series.sinopsisTrailer}</TableCell>
-                <TableCell>
-                  <Link
-                    href={series.urlTrailer}
-                    target="_blank"
-                    className="hover:underline"
-                  >
-                    {series.urlTrailer}
-                  </Link>
-                </TableCell>
-                <TableCell>{rilisDate}</TableCell>
-                {isAuthenticated && (
+              return (
+                <TableRow key={series.id_tayangan}>
+                  <TableCell>{series.judul}</TableCell>
+                  <TableCell>{series.sinopsis_trailer}</TableCell>
                   <TableCell>
-                    <Button
-                      onClick={() =>
-                        router.push(`/tayangan/series/${series.id}`)
-                      }
+                    <Link
+                      href={series.url_video_trailer}
+                      target="_blank"
+                      className="hover:underline"
                     >
-                      Detail Series
-                    </Button>
+                      {series.url_video_trailer}
+                    </Link>
                   </TableCell>
-                )}
-              </TableRow>
-            )
-          })}
+                  <TableCell>{rilisDate}</TableCell>
+                  {isAuthenticated && (
+                    <TableCell>
+                      <Button
+                        onClick={() =>
+                          router.push(`/tayangan/series/${series.id_tayangan}`)
+                        }
+                      >
+                        Detail Series
+                      </Button>
+                    </TableCell>
+                  )}
+                </TableRow>
+              )
+            })}
         </TableBody>
       </Table>
     </div>

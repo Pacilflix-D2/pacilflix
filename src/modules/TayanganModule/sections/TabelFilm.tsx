@@ -8,16 +8,23 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import React from 'react'
-import { top10Films as films } from '@/components/constants/tayangan'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAuthContext } from '@/components/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import { Film } from '../interface'
 
 const TabelFilm = () => {
   const router = useRouter()
-  const { isAuthenticated } = useAuthContext()
+  const { isAuthenticated, customFetch } = useAuthContext()
+  const [films, setFilms] = useState<Film[] | null>(null)
+
+  useEffect(() => {
+    customFetch<Film[]>('/api/film/').then((response) =>
+      setFilms(response.data)
+    )
+  }, [])
 
   return (
     <div className="max-w-[1000px] mx-auto w-full flex flex-col gap-4">
@@ -35,40 +42,41 @@ const TabelFilm = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {films.map((film) => {
-            const rilisDateObject = new Date(film.tanggalRilisTrailer)
-            const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric',
-            })
+          {films &&
+            films.map((film) => {
+              const rilisDateObject = new Date(film.release_date_film)
+              const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })
 
-            return (
-              <TableRow key={film.id}>
-                <TableCell>{film.judul}</TableCell>
-                <TableCell>{film.sinopsisTrailer}</TableCell>
-                <TableCell>
-                  <Link
-                    href={film.urlTrailer}
-                    target="_blank"
-                    className="hover:underline"
-                  >
-                    {film.urlTrailer}
-                  </Link>
-                </TableCell>
-                <TableCell>{rilisDate}</TableCell>
-                {isAuthenticated && (
+              return (
+                <TableRow key={film.id_tayangan}>
+                  <TableCell>{film.judul}</TableCell>
+                  <TableCell>{film.sinopsis_trailer}</TableCell>
                   <TableCell>
-                    <Button
-                      onClick={() => router.push(`/tayangan/film/${film.id}`)}
+                    <Link
+                      href={film.url_video_trailer}
+                      target="_blank"
+                      className="hover:underline"
                     >
-                      Detail Film
-                    </Button>
+                      {film.url_video_trailer}
+                    </Link>
                   </TableCell>
-                )}
-              </TableRow>
-            )
-          })}
+                  <TableCell>{rilisDate}</TableCell>
+                  {isAuthenticated && (
+                    <TableCell>
+                      <Button
+                        onClick={() => router.push(`/tayangan/film/${film.id}`)}
+                      >
+                        Detail Film
+                      </Button>
+                    </TableCell>
+                  )}
+                </TableRow>
+              )
+            })}
         </TableBody>
       </Table>
     </div>
