@@ -44,7 +44,7 @@ const SeriesDetailModule = () => {
                     <li key={index}>
                       -{' '}
                       <Link
-                        href={`/tayangan/series/${idSeries}/episode/${episode.id_series}/${episode.sub_judul}/`}
+                        href={`/tayangan/series/${idSeries}/episode/${episode.sub_judul}/`}
                         className="hover:underline"
                       >
                         {episode.sub_judul}
