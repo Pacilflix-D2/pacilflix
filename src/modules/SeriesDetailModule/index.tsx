@@ -39,19 +39,23 @@ const SeriesDetailModule = () => {
             <section className="w-[95%] max-w-[1000px] mx-auto flex flex-col gap-4">
               <div>
                 <strong>Episode: </strong>
-                <ul>
-                  {series.episodes.map((episode, index) => (
-                    <li key={index}>
-                      -{' '}
-                      <Link
-                        href={`/tayangan/series/${idSeries}/episode/${episode.sub_judul}/`}
-                        className="hover:underline"
-                      >
-                        {episode.sub_judul}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {series.episodes.length > 0 ? (
+                  <ul>
+                    {series.episodes.map((episode, index) => (
+                      <li key={index}>
+                        -{' '}
+                        <Link
+                          href={`/tayangan/series/${idSeries}/episode/${episode.sub_judul}/`}
+                          className="hover:underline"
+                        >
+                          {episode.sub_judul}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Tidak ada episode</p>
+                )}
               </div>
 
               <div>

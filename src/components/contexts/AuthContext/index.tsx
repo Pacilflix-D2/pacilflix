@@ -49,6 +49,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     }
 
     if (!result.success) {
+      toast.error(result.message)
       throw new Error(result.message)
     }
 

@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Tayangan } from '../interface'
 
-const TableTop10 = ({ top10Films }: { top10Films: Tayangan[] | null }) => {
+const TableTop10 = ({ top10Shows }: { top10Shows: Tayangan[] | null }) => {
   const { isAuthenticated } = useAuthContext()
   const router = useRouter()
 
@@ -35,9 +35,9 @@ const TableTop10 = ({ top10Films }: { top10Films: Tayangan[] | null }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {top10Films &&
-          top10Films.map((film, index) => {
-            const rilisDateObject = new Date(film.release_date_trailer)
+        {top10Shows &&
+          top10Shows.map((show, index) => {
+            const rilisDateObject = new Date(show.release_date_trailer)
             const rilisDate = rilisDateObject.toLocaleDateString('id-ID', {
               day: 'numeric',
               month: 'long',
@@ -45,27 +45,33 @@ const TableTop10 = ({ top10Films }: { top10Films: Tayangan[] | null }) => {
             })
 
             return (
-              <TableRow key={film.id}>
+              <TableRow key={show.id}>
                 <TableCell className="font-medium">{index + 1}</TableCell>
-                <TableCell>{film.judul}</TableCell>
-                <TableCell>{film.sinopsis_trailer}</TableCell>
+                <TableCell>{show.judul}</TableCell>
+                <TableCell>{show.sinopsis_trailer}</TableCell>
                 <TableCell>
                   <Link
-                    href={film.url_video_trailer}
+                    href={show.url_video_trailer}
                     target="_blank"
                     className="hover:underline"
                   >
-                    {film.url_video_trailer}
+                    {show.url_video_trailer}
                   </Link>
                 </TableCell>
                 <TableCell>{rilisDate}</TableCell>
-                <TableCell>{film.total_views}</TableCell>
+                <TableCell>{show.total_views}</TableCell>
                 {isAuthenticated && (
                   <TableCell>
                     <Button
-                      onClick={() => router.push(`/tayangan/film/${film.id}`)}
+                      onClick={() =>
+                        router.push(
+                          show.type === 'FILM'
+                            ? `/tayangan/film/${show.id}`
+                            : `/tayangan/series/${show.id}`
+                        )
+                      }
                     >
-                      Detail Film
+                      Detail Tayangan
                     </Button>
                   </TableCell>
                 )}
@@ -79,7 +85,7 @@ const TableTop10 = ({ top10Films }: { top10Films: Tayangan[] | null }) => {
 
 const Top10Tayangan = () => {
   const { isAuthenticated, customFetch } = useAuthContext()
-  const [top10Films, setTop10Films] = useState<Tayangan[] | null>(null)
+  const [top10Shows, setTop10Shows] = useState<Tayangan[] | null>(null)
   const [tabValue, setTabValue] = useState<string>('top-10-global')
 
   useEffect(() => {
@@ -88,7 +94,7 @@ const Top10Tayangan = () => {
       {
         isAuthorized: isAuthenticated,
       }
-    ).then((response) => setTop10Films(response.data))
+    ).then((response) => setTop10Shows(response.data))
   }, [tabValue])
 
   return (
@@ -112,11 +118,11 @@ const Top10Tayangan = () => {
         </TabsList>
 
         <TabsContent value="top-10-global">
-          <TableTop10 top10Films={top10Films} />
+          <TableTop10 top10Shows={top10Shows} />
         </TabsContent>
 
         <TabsContent value="top-10-negara-pengguna">
-          <TableTop10 top10Films={top10Films} />
+          <TableTop10 top10Shows={top10Shows} />
         </TabsContent>
       </Tabs>
     </div>

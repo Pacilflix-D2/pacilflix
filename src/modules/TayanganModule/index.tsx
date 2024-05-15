@@ -7,7 +7,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -18,8 +18,14 @@ import { FormSchema } from './form'
 import Top10Tayangan from './sections/Top10Tayangan'
 import TabelFilm from './sections/TabelFilm'
 import TabelSeries from './sections/TabelSeries'
+import { Tayangan } from './interface'
+import { useAuthContext } from '@/components/contexts/AuthContext'
+import TabelSearchTayangan from './sections/TabelSearchTayangan'
 
 const TayanganModule = () => {
+  const [searchedShows, setSearchedShows] = useState<Tayangan[] | null>(null)
+  const { customFetch, isAuthenticated } = useAuthContext()
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -28,9 +34,13 @@ const TayanganModule = () => {
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast('You submitted the following values:', {
-      description: JSON.stringify(data, null, 2),
+    toast('You search this show:', {
+      description: data.tayanganTitle,
     })
+
+    customFetch<Tayangan[]>(`/api/shows/search/?search=${data.tayanganTitle}`, {
+      isAuthorized: isAuthenticated,
+    }).then((response) => setSearchedShows(response.data))
   }
 
   return (
@@ -65,11 +75,17 @@ const TayanganModule = () => {
           </form>
         </Form>
 
-        <Top10Tayangan />
+        {searchedShows ? (
+          <TabelSearchTayangan shows={searchedShows} />
+        ) : (
+          <>
+            <Top10Tayangan />
 
-        <TabelFilm />
+            <TabelFilm />
 
-        <TabelSeries />
+            <TabelSeries />
+          </>
+        )}
       </div>
     </main>
   )

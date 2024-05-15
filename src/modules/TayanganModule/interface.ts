@@ -8,6 +8,7 @@ export interface Tayangan {
   release_date_trailer: string
   id_sutradara: string
   total_views: number
+  type: 'FILM' | 'SERIES'
 }
 
 export interface Film {
