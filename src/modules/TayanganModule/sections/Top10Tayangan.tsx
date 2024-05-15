@@ -71,7 +71,7 @@ const TableTop10 = ({ top10Shows }: { top10Shows: Tayangan[] | null }) => {
                         )
                       }
                     >
-                      Detail Tayangan
+                      Detail {show.type == 'FILM' ? 'Film' : 'Series'}
                     </Button>
                   </TableCell>
                 )}

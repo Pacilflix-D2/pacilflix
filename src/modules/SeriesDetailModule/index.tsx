@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { SeriesDetails } from './interface'
 import { useAuthContext } from '@/components/contexts/AuthContext'
 import { Review } from '../FilmDetailModule/interface'
+import ReviewsSection from './sections/ReviewsSection'
 
 const SeriesDetailModule = () => {
   const { idSeries } = useParams<{ idSeries: string }>()
@@ -111,24 +112,11 @@ const SeriesDetailModule = () => {
               </div>
             </section>
 
-            <section className="w-[95%] max-w-[1000px] mx-auto flex flex-col gap-4">
-              <h2 className="font-bold text-2xl">Review</h2>
-
-              {reviews &&
-                reviews.map((review, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="bg-accent rounded-md p-4 flex flex-col gap-1"
-                    >
-                      <h3>
-                        <strong>{review.username}</strong> | {review.rating}/10
-                      </h3>
-                      <p>{review.deskripsi}</p>
-                    </div>
-                  )
-                })}
-            </section>
+            <ReviewsSection
+              reviews={reviews}
+              series={series}
+              setReviews={setReviews}
+            />
           </div>
         </>
       )}
