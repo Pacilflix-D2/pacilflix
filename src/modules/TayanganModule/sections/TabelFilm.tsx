@@ -21,9 +21,9 @@ const TabelFilm = () => {
   const [films, setFilms] = useState<Film[] | null>(null)
 
   useEffect(() => {
-    customFetch<Film[]>('/api/film/').then((response) =>
-      setFilms(response.data)
-    )
+    customFetch<Film[]>('/api/film/', {
+      isAuthorized: true,
+    }).then((response) => setFilms(response.data))
   }, [])
 
   return (
