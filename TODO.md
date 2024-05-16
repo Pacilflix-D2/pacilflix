@@ -17,3 +17,5 @@ TODO:
 - integ hapus daftar unduh
 
 - integ detail episode
+
+- bikin trigger setiap tabel
