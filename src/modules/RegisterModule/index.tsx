@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { RegistrationFormData } from './interface'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,6 +17,8 @@ const RegisterPage: React.FC = () => {
     negara_asal: '',
   })
 
+  const router = useRouter()
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -23,9 +26,17 @@ const RegisterPage: React.FC = () => {
     })
   }
 
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log('Registration attempt with:', formData)
+
+    const isSuccess = true
+
+    if (isSuccess) {
+      router.push('/login')
+    } else {
+      console.error('Registration failed')
+    }
   }
 
   return (
