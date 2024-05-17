@@ -12,12 +12,41 @@ import {
 import { useAuthContext } from '@/components/contexts/AuthContext'
 import { FilmDetails, Review } from './interface'
 import ReviewsSection from './sections/ReviewsSection'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Favorite } from '../FavoritesModule/interface'
+import { toast } from 'sonner'
 
 const FilmDetailModule = () => {
   const params = useParams<{ idFilm: string }>()
   const [film, setFilm] = useState<FilmDetails | null>(null)
   const [reviews, setReviews] = useState<Review[] | null>(null)
   const { customFetch, isAuthenticated } = useAuthContext()
+  const [favorites, setFavorites] = useState<Favorite[] | null>(null)
+  const [chosenJudulFavorite, setChosenJudulFavorite] = useState<string>('')
+
+  const [openModalDownload, setOpenModalDownload] = useState<boolean>(false)
+  const [openModalFavorite, setOpenModalFavorite] = useState<boolean>(false)
+
+  const addFavorite = () => {
+    customFetch(`/api/favorites/detail/`, {
+      method: 'POST',
+      body: JSON.stringify({
+        id_tayangan: params.idFilm,
+        timestamp: favorites
+          ?.filter((value) => value.judul == chosenJudulFavorite)[0]
+          .timestamp.replace(/\.\d{6}Z$/, ''),
+      }),
+      isAuthorized: true,
+    }).then((response) => {
+      toast(response.message)
+    })
+  }
 
   useEffect(() => {
     customFetch<FilmDetails>(`/api/film/${params.idFilm}/`, {
@@ -27,7 +56,29 @@ const FilmDetailModule = () => {
     customFetch<Review[]>(`/api/film/${params.idFilm}/reviews/`, {
       isAuthorized: isAuthenticated,
     }).then((response) => setReviews(response.data))
+
+    customFetch<Favorite[]>('/api/favorites/', {
+      isAuthorized: true,
+    }).then((response) => {
+      setFavorites(response.data)
+    })
   }, [params])
+
+  useEffect(() => {
+    if (openModalDownload && film) {
+      customFetch('/api/downloads/', {
+        isAuthorized: true,
+        body: JSON.stringify({
+          id_tayangan: film.id_tayangan,
+          timestamp: new Date().toISOString().replace(/\.\d{3}Z$/, ''),
+        }),
+        method: 'POST',
+      }).then((response) => {
+        toast(response.message)
+        setOpenModalDownload(false)
+      })
+    }
+  }, [openModalDownload])
 
   return (
     <main className="py-28 grid grid-cols-1 gap-y-28">
@@ -37,7 +88,7 @@ const FilmDetailModule = () => {
         <div className="flex justify-center gap-2">
           <Button>Tonton Film</Button>
 
-          <Dialog>
+          <Dialog open={openModalDownload} onOpenChange={setOpenModalDownload}>
             <DialogTrigger>
               <Button>Unduh Tayangan</Button>
             </DialogTrigger>
@@ -46,8 +97,8 @@ const FilmDetailModule = () => {
                 <DialogTitle>Sukses Mengunduh Tayangan!</DialogTitle>
                 <DialogDescription>
                   Selamat! Anda telah berhasil mengunduh {film?.judul} dan akan
-                  berlaku hingga 9 Mei 2004. Cek informasi selengkapnya pada
-                  halaman daftar unduhan.
+                  berlaku hingga {new Date().setDate(new Date().getDate() + 7)}.
+                  Cek informasi selengkapnya pada halaman daftar unduhan.
                 </DialogDescription>
               </DialogHeader>
 
@@ -55,17 +106,37 @@ const FilmDetailModule = () => {
             </DialogContent>
           </Dialog>
 
-          <Dialog>
+          <Dialog open={openModalFavorite} onOpenChange={setOpenModalFavorite}>
             <DialogTrigger>
               <Button>Tambah Favorit</Button>
             </DialogTrigger>
             <DialogContent>
-              <DialogHeader>
+              <DialogHeader className="flex flex-col gap-3">
                 <DialogTitle>Konfirmasi</DialogTitle>
-                <DialogDescription>
-                  Apakah kamu ingin menambah ke daftar favorit?
+                <DialogDescription className="flex flex-col gap-3">
+                  <p>Pilih folder favorit</p>
+                  <Select
+                    onValueChange={(value: string) =>
+                      setChosenJudulFavorite(value)
+                    }
+                    value={chosenJudulFavorite}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Daftar favorit" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {favorites &&
+                        favorites.map((favorite, index) => {
+                          return (
+                            <SelectItem key={index} value={favorite.judul}>
+                              {favorite.judul}
+                            </SelectItem>
+                          )
+                        })}
+                    </SelectContent>
+                  </Select>
                 </DialogDescription>
-                <Button>Tambahkan ke Favorit</Button>
+                <Button onClick={addFavorite}>Tambahkan ke Favorit</Button>
               </DialogHeader>
             </DialogContent>
           </Dialog>

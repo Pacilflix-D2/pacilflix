@@ -6,12 +6,48 @@ import { SeriesDetails } from './interface'
 import { useAuthContext } from '@/components/contexts/AuthContext'
 import { Review } from '../FilmDetailModule/interface'
 import ReviewsSection from './sections/ReviewsSection'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Favorite } from '../FavoritesModule/interface'
+import { toast } from 'sonner'
 
 const SeriesDetailModule = () => {
   const { idSeries } = useParams<{ idSeries: string }>()
   const [reviews, setReviews] = useState<Review[] | null>(null)
   const [series, setSeries] = useState<SeriesDetails | null>(null)
   const { customFetch, isAuthenticated } = useAuthContext()
+  const [favorites, setFavorites] = useState<Favorite[] | null>(null)
+  const [chosenJudulFavorite, setChosenJudulFavorite] = useState<string>('')
+  const [openModalFavorite, setOpenModalFavorite] = useState<boolean>(false)
+
+  const addFavorite = () => {
+    customFetch(`/api/favorites/detail/`, {
+      method: 'POST',
+      body: JSON.stringify({
+        id_tayangan: idSeries,
+        timestamp: favorites
+          ?.filter((value) => value.judul == chosenJudulFavorite)[0]
+          .timestamp.replace(/\.\d{6}Z$/, ''),
+      }),
+      isAuthorized: true,
+    }).then((response) => {
+      toast(response.message)
+      setOpenModalFavorite(false)
+    })
+  }
 
   useEffect(() => {
     customFetch<SeriesDetails>(`/api/series/${idSeries}/`, {
@@ -21,6 +57,12 @@ const SeriesDetailModule = () => {
     customFetch<Review[]>(`/api/series/${idSeries}/reviews/`, {
       isAuthorized: isAuthenticated,
     }).then((response) => setReviews(response.data))
+
+    customFetch<Favorite[]>('/api/favorites/', {
+      isAuthorized: true,
+    }).then((response) => {
+      setFavorites(response.data)
+    })
   }, [])
 
   return (
@@ -31,8 +73,63 @@ const SeriesDetailModule = () => {
             <h1 className="text-6xl font-bold">Judul: {series.judul}</h1>
 
             <div className="flex justify-center gap-2">
-              <Button>Unduh Tayangan</Button>
-              <Button>Tambah Favorit</Button>
+              <Button>Tonton Film</Button>
+
+              <Dialog>
+                <DialogTrigger>
+                  <Button>Unduh Tayangan</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Sukses Mengunduh Tayangan!</DialogTitle>
+                    <DialogDescription>
+                      Selamat! Anda telah berhasil mengunduh {series?.judul} dan
+                      akan berlaku hingga 9 Mei 2004. Cek informasi selengkapnya
+                      pada halaman daftar unduhan.
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <Button>Tombol Menuju Daftar Unduhan</Button>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog
+                open={openModalFavorite}
+                onOpenChange={setOpenModalFavorite}
+              >
+                <DialogTrigger>
+                  <Button>Tambah Favorit</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader className="flex flex-col gap-3">
+                    <DialogTitle>Konfirmasi</DialogTitle>
+                    <DialogDescription className="flex flex-col gap-3">
+                      <p>Pilih folder favorit</p>
+                      <Select
+                        onValueChange={(value: string) =>
+                          setChosenJudulFavorite(value)
+                        }
+                        value={chosenJudulFavorite}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select Daftar favorit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {favorites &&
+                            favorites.map((favorite, index) => {
+                              return (
+                                <SelectItem key={index} value={favorite.judul}>
+                                  {favorite.judul}
+                                </SelectItem>
+                              )
+                            })}
+                        </SelectContent>
+                      </Select>
+                    </DialogDescription>
+                    <Button onClick={addFavorite}>Tambahkan ke Favorit</Button>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
 
