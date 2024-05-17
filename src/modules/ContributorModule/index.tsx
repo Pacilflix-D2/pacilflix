@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Table,
   TableBody,
@@ -9,12 +9,19 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { contributors } from '@/components/constants/contributors'
 import { useAuthContext } from '@/components/contexts/AuthContext'
+import { Contributor } from '@/components/constants/contributors'
 
 const ContributorsPage = () => {
-  const { isAuthenticated } = useAuthContext()
+  const { isAuthenticated, customFetch } = useAuthContext()
   const [filterType, setFilterType] = useState('all-contributors')
+  const [contributors, setContributors] = useState<Contributor[]>([])
+
+  useEffect(() => {
+    customFetch<Contributor[]>('/api/contributors/', {
+      isAuthorized: true,
+    }).then((response) => setContributors(response.data))
+  }, [])
 
   const filteredContributors =
     filterType === 'all-contributors'
@@ -86,7 +93,7 @@ const ContributorsPage = () => {
                   <TableRow key={index}>
                     <TableCell>{contributor.nama}</TableCell>
                     <TableCell>{contributor.tipe.join(', ')}</TableCell>
-                    <TableCell>{contributor.jenisKelamin}</TableCell>
+                    <TableCell>{contributor.jenis_kelamin}</TableCell>
                     <TableCell>{contributor.kewarganegaraan}</TableCell>
                   </TableRow>
                 ))}

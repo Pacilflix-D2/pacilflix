@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Table, TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { useAuthContext } from '@/components/contexts/AuthContext'
 
 const SubscriptionBuyModule = ({
   selectedPackage,
@@ -8,6 +9,7 @@ const SubscriptionBuyModule = ({
 }) => {
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('')
   const [paymentSuccess, setPaymentSuccess] = useState(false)
+  const { customFetch } = useAuthContext()
 
   const handlePaymentMethodChange = (e) => {
     setSelectedPaymentMethod(e.target.value)
@@ -28,14 +30,39 @@ const SubscriptionBuyModule = ({
       paymentMethod: selectedPaymentMethod,
       paymentDate: startDate,
       totalPayment: selectedPackage.price,
+      supportedDevices: selectedPackage.supportedDevices,
+      resolution: selectedPackage.resolution,
+      price: selectedPackage.price,
+      name: selectedPackage.name,
     }
 
-    const newSubscription = selectedPackage
+    customFetch('/api/subscriptions/buy/', {
+      method: 'POST',
+      body: JSON.stringify(newTransaction),
+      isAuthorized: true,
+    })
+      .then((response) => {
+        if (response && response.success) {
+          setTransactionHistory((prevHistory) => {
+            const latestTransaction = prevHistory[prevHistory.length - 1]
+            const isOverdue = new Date(latestTransaction.endDate) < new Date()
 
-    setTransactionHistory((prevHistory) => [...prevHistory, newTransaction])
-    setActiveSubscriptions([newSubscription])
+            if (isOverdue) {
+              return [...prevHistory, newTransaction]
+            } else {
+              return prevHistory.map((transaction, index) =>
+                index === prevHistory.length - 1 ? newTransaction : transaction
+              )
+            }
+          })
+          setActiveSubscriptions(newTransaction)
 
-    setPaymentSuccess(true)
+          setPaymentSuccess(true)
+        } else {
+          console.error('Unexpected response:', response)
+        }
+      })
+      .catch((error) => console.error('Error:', error))
   }
 
   return (
