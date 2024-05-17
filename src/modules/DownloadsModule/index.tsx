@@ -10,15 +10,11 @@ import {
 } from '@/components/ui/table'
 import { useAuthContext } from '@/components/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
-
-const DummyDownloads = [
-  { id: '1', title: 'Film A', downloadedAt: '2024-04-01 10:00:00' },
-  { id: '2', title: 'Film B', downloadedAt: '2024-04-02 11:00:00' },
-]
+import { Download } from './interface'
 
 const DownloadsModule = () => {
-  const [downloads, setDownloads] = useState(DummyDownloads)
-  const { isAuthenticated, isLoading } = useAuthContext()
+  const [downloads, setDownloads] = useState<Download[] | null>(null)
+  const { isAuthenticated, isLoading, customFetch } = useAuthContext()
   const router = useRouter()
 
   useEffect(() => {
@@ -27,8 +23,21 @@ const DownloadsModule = () => {
     }
   }, [isAuthenticated, isLoading, router])
 
-  const handleDelete = (downloadId: string) => {
-    setDownloads(downloads.filter((download) => download.id !== downloadId))
+  useEffect(() => {
+    customFetch<Download[]>('/api/downloads/', { isAuthorized: true }).then(
+      (response) => setDownloads(response.data)
+    )
+  }, [])
+
+  const handleDelete = (timestamp: string, id_tayangan: string) => {
+    customFetch<Download[]>('/api/downloads/', {
+      isAuthorized: true,
+      body: JSON.stringify({
+        timestamp: timestamp.replace(/\.\d{6}Z$/, ''),
+        id_tayangan,
+      }),
+      method: 'DELETE',
+    }).then((response) => setDownloads(response.data))
   }
 
   if (isLoading) {
@@ -54,18 +63,25 @@ const DownloadsModule = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {downloads.map((download) => (
-                <TableRow key={download.id}>
-                  <TableCell>{download.title}</TableCell>
-                  <TableCell>{download.downloadedAt}</TableCell>
-                  <TableCell>
-                    <Button onClick={() => handleDelete(download.id)}>
-                      Delete
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {downloads.length === 0 && (
+              {downloads &&
+                downloads.map((download, index) => (
+                  <TableRow key={index}>
+                    <TableCell>{download.judul}</TableCell>
+                    <TableCell>
+                      {new Date(download.timestamp).toString()}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() =>
+                          handleDelete(download.timestamp, download.id_tayangan)
+                        }
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              {(downloads == null || downloads.length === 0) && (
                 <TableRow>
                   <TableCell colSpan={3}>No downloads added.</TableCell>
                 </TableRow>
