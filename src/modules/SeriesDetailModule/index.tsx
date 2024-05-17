@@ -85,9 +85,11 @@ const SeriesDetailModule = () => {
                     <DialogDescription>
                       Selamat! Anda telah berhasil mengunduh {series?.judul} dan
                       akan berlaku hingga{' '}
-                      {new Date()
-                        .setDate(new Date().getDate() + 7)
-                        .toLocaleString()}
+                      {(() => {
+                        const date = new Date()
+                        date.setDate(date.getDate() + 7)
+                        return date.toLocaleDateString()
+                      })()}
                       . Cek informasi selengkapnya pada halaman daftar unduhan.
                     </DialogDescription>
                   </DialogHeader>
