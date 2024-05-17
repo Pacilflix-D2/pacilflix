@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { SeriesDetails } from './interface'
 import { useAuthContext } from '@/components/contexts/AuthContext'
@@ -25,6 +25,7 @@ import { Favorite } from '../FavoritesModule/interface'
 import { toast } from 'sonner'
 
 const SeriesDetailModule = () => {
+  const router = useRouter()
   const { idSeries } = useParams<{ idSeries: string }>()
   const [reviews, setReviews] = useState<Review[] | null>(null)
   const [series, setSeries] = useState<SeriesDetails | null>(null)
@@ -94,7 +95,9 @@ const SeriesDetailModule = () => {
                     </DialogDescription>
                   </DialogHeader>
 
-                  <Button>Tombol Menuju Daftar Unduhan</Button>
+                  <Button onClick={() => router.push('/downloads')}>
+                    Tombol Menuju Daftar Unduhan
+                  </Button>
                 </DialogContent>
               </Dialog>
 
