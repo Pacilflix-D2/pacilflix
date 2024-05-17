@@ -8,8 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { useAuthContext } from '@/components/contexts/AuthContext'
+import { toast } from 'sonner'
 
 const RegisterPage: React.FC = () => {
+  const { customFetch } = useAuthContext()
+
   const [formData, setFormData] = useState<RegistrationFormData>({
     username: '',
     password: '',
@@ -25,7 +29,10 @@ const RegisterPage: React.FC = () => {
 
   const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Registration attempt with:', formData)
+    customFetch('/api/auth/register/', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    }).then((response) => toast(response.message))
   }
 
   return (
