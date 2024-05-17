@@ -84,8 +84,11 @@ const SeriesDetailModule = () => {
                     <DialogTitle>Sukses Mengunduh Tayangan!</DialogTitle>
                     <DialogDescription>
                       Selamat! Anda telah berhasil mengunduh {series?.judul} dan
-                      akan berlaku hingga 9 Mei 2004. Cek informasi selengkapnya
-                      pada halaman daftar unduhan.
+                      akan berlaku hingga{' '}
+                      {new Date()
+                        .setDate(new Date().getDate() + 7)
+                        .toLocaleString()}
+                      . Cek informasi selengkapnya pada halaman daftar unduhan.
                     </DialogDescription>
                   </DialogHeader>
 

@@ -1,4 +1,4 @@
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -32,6 +32,8 @@ const FilmDetailModule = () => {
 
   const [openModalDownload, setOpenModalDownload] = useState<boolean>(false)
   const [openModalFavorite, setOpenModalFavorite] = useState<boolean>(false)
+
+  const router = useRouter()
 
   const addFavorite = () => {
     customFetch(`/api/favorites/detail/`, {
@@ -75,7 +77,6 @@ const FilmDetailModule = () => {
         method: 'POST',
       }).then((response) => {
         toast(response.message)
-        setOpenModalDownload(false)
       })
     }
   }, [openModalDownload])
@@ -98,12 +99,16 @@ const FilmDetailModule = () => {
                 <DialogDescription>
                   Selamat! Anda telah berhasil mengunduh {film?.judul} dan akan
                   berlaku hingga{' '}
-                  {new Date().setDate(new Date().getDate() + 7).toString()}. Cek
-                  informasi selengkapnya pada halaman daftar unduhan.
+                  {new Date()
+                    .setDate(new Date().getDate() + 7)
+                    .toLocaleString()}
+                  . Cek informasi selengkapnya pada halaman daftar unduhan.
                 </DialogDescription>
               </DialogHeader>
 
-              <Button>Tombol Menuju Daftar Unduhan</Button>
+              <Button onClick={() => router.push('/downloads')}>
+                Tombol Menuju Daftar Unduhan
+              </Button>
             </DialogContent>
           </Dialog>
 
