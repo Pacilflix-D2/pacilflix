@@ -27,7 +27,7 @@ const RegisterPage: React.FC = () => {
     })
   }
 
-  const handleRegister = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     customFetch('/api/auth/register/', {
       method: 'POST',
