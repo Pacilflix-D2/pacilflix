@@ -69,7 +69,7 @@ const TabelSearchTayangan = ({ shows }: { shows: Tayangan[] }) => {
                           )
                         }
                       >
-                        Detail Tayangan
+                        Detail {show.type == 'FILM' ? 'Film' : 'Series'}
                       </Button>
                     </TableCell>
                   )}

@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog'
 import { useAuthContext } from '@/components/contexts/AuthContext'
 import { FilmDetails, Review } from './interface'
+import ReviewsSection from './sections/ReviewsSection'
 
 const FilmDetailModule = () => {
   const params = useParams<{ idFilm: string }>()
@@ -142,24 +143,11 @@ const FilmDetailModule = () => {
             </div>
           </section>
 
-          <section className="w-[95%] max-w-[1000px] mx-auto flex flex-col gap-4">
-            <h2 className="font-bold text-2xl">Review</h2>
-
-            {reviews &&
-              reviews.map((review, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="bg-accent rounded-md p-4 flex flex-col gap-1"
-                  >
-                    <h3>
-                      <strong>{review.username}</strong> | {review.rating}/10
-                    </h3>
-                    <p>{review.deskripsi}</p>
-                  </div>
-                )
-              })}
-          </section>
+          <ReviewsSection
+            reviews={reviews}
+            setReviews={setReviews}
+            film={film}
+          />
         </>
       )}
     </main>
