@@ -92,13 +92,14 @@ const FilmDetailModule = () => {
             <DialogTrigger>
               <Button>Unduh Tayangan</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="flex flex-col gap-5">
               <DialogHeader>
                 <DialogTitle>Sukses Mengunduh Tayangan!</DialogTitle>
                 <DialogDescription>
                   Selamat! Anda telah berhasil mengunduh {film?.judul} dan akan
-                  berlaku hingga {new Date().setDate(new Date().getDate() + 7)}.
-                  Cek informasi selengkapnya pada halaman daftar unduhan.
+                  berlaku hingga{' '}
+                  {new Date().setDate(new Date().getDate() + 7).toString()}. Cek
+                  informasi selengkapnya pada halaman daftar unduhan.
                 </DialogDescription>
               </DialogHeader>
 
