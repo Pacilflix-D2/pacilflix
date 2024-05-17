@@ -9,30 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-
-interface Subscription {
-  name: string
-  price: number
-  resolution: string
-  supportedDevices: string[]
-  startDate: string
-  endDate: string
-}
-
-interface Transaction {
-  packageName: string
-  startDate: string
-  endDate: string
-  paymentMethod: string
-  paymentDate: string
-  totalPayment: number
-}
-
-interface Props {
-  setTransactionHistory: (transactions: Transaction[]) => void
-  availableSubscriptions: Subscription[]
-  setActiveSubscriptions: (subscriptions: Subscription[]) => void
-}
+import { Subscription } from '@/components/constants/subscription'
+import { Props } from '@/components/constants/props'
 
 const SubscriptionPurchaseSection: React.FC<Props> = ({
   setTransactionHistory,
