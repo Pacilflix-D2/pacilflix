@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select'
 import { Favorite } from '../FavoritesModule/interface'
 import { toast } from 'sonner'
+import { Slider } from '@/components/ui/slider'
 
 const FilmDetailModule = () => {
   const params = useParams<{ idFilm: string }>()
@@ -29,7 +30,9 @@ const FilmDetailModule = () => {
   const { customFetch, isAuthenticated } = useAuthContext()
   const [favorites, setFavorites] = useState<Favorite[] | null>(null)
   const [chosenJudulFavorite, setChosenJudulFavorite] = useState<string>('')
+  const [progressNonton, setProgressNonton] = useState<number>(0)
 
+  const [openModalTonton, setOpenModalTonton] = useState<boolean>(false)
   const [openModalDownload, setOpenModalDownload] = useState<boolean>(false)
   const [openModalFavorite, setOpenModalFavorite] = useState<boolean>(false)
 
@@ -87,7 +90,36 @@ const FilmDetailModule = () => {
         <h1 className="text-6xl font-bold">Judul: {film?.judul}</h1>
 
         <div className="flex justify-center gap-2">
-          <Button>Tonton Film</Button>
+          <Dialog open={openModalTonton} onOpenChange={setOpenModalTonton}>
+            <DialogTrigger>
+              <Button>Tonton Film</Button>
+            </DialogTrigger>
+            <DialogContent className="flex flex-col gap-5">
+              <DialogHeader>
+                <DialogTitle>Tonton tayangan</DialogTitle>
+                <DialogDescription className="flex flex-col gap-2">
+                  <p>Pura2 nonton aja :)</p>
+                  <Slider
+                    defaultValue={[progressNonton]}
+                    max={100}
+                    step={1}
+                    onChange={(event: React.FormEvent<HTMLDivElement>) => {
+                      console.log(event)
+
+                      setProgressNonton(0)
+                    }}
+                  />
+                  <Button onClick={() => setOpenModalTonton(false)}>
+                    Submit tonton
+                  </Button>
+                </DialogDescription>
+              </DialogHeader>
+
+              <Button onClick={() => router.push('/downloads')}>
+                Tombol Menuju Daftar Unduhan
+              </Button>
+            </DialogContent>
+          </Dialog>
 
           <Dialog open={openModalDownload} onOpenChange={setOpenModalDownload}>
             <DialogTrigger>
