@@ -10,42 +10,64 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { availableSubscriptions } from '@/components/constants/subscription'
-import { activeSubscription } from '@/components/constants/subscription'
+import {
+  Subscription,
+  availableSubscriptions,
+} from '@/components/constants/subscription'
 import { Transaction } from '@/components/constants/transaction'
 
 const SubscriptionManagementPage = () => {
   const { isAuthenticated, customFetch } = useAuthContext()
-  const [activeSubscriptions, setActiveSubscriptions] =
-    useState<activeSubscription>()
+
+  const localActiveSubscriptions =
+    typeof window !== 'undefined'
+      ? localStorage.getItem('activeSubscriptions')
+      : null
+  const localTransactionHistory =
+    typeof window !== 'undefined'
+      ? localStorage.getItem('transactionHistory')
+      : null
+
+  const [activeSubscriptions, setActiveSubscriptions] = useState<Subscription>(
+    localActiveSubscriptions ? JSON.parse(localActiveSubscriptions) : null
+  )
+  const [transactionHistory, setTransactionHistory] = useState<Transaction[]>(
+    localTransactionHistory ? JSON.parse(localTransactionHistory) : null
+  )
 
   useEffect(() => {
     if (isAuthenticated) {
-      customFetch('/api/subscriptions/active/', { isAuthorized: true })
-        .then((response) => {
-          if (response && response.data) {
-            setActiveSubscriptions(response.data)
-          } else {
-            console.error('Unexpected response:', response)
-          }
-        })
-        .catch((error) => console.error('Error:', error))
-    }
-  }, [])
+      if (!activeSubscriptions) {
+        customFetch('/api/subscriptions/active/', { isAuthorized: true })
+          .then((response) => {
+            if (response && response.data) {
+              setActiveSubscriptions(response.data)
+              localStorage.setItem(
+                'activeSubscriptions',
+                JSON.stringify(response.data)
+              )
+            } else {
+              console.error('Unexpected response:', response)
+            }
+          })
+          .catch((error) => console.error('Error:', error))
+      }
 
-  const [transactionHistory, setTransactionHistory] = useState<Transaction[]>()
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      customFetch('/api/subscriptions/history/', { isAuthorized: true })
-        .then((response) => {
-          if (response && response.data) {
-            setTransactionHistory(response.data)
-          } else {
-            console.error('Unexpected response:', response)
-          }
-        })
-        .catch((error) => console.error('Error:', error))
+      if (!transactionHistory) {
+        customFetch('/api/subscriptions/history/', { isAuthorized: true })
+          .then((response) => {
+            if (response && response.data) {
+              setTransactionHistory(response.data)
+              localStorage.setItem(
+                'transactionHistory',
+                JSON.stringify(response.data)
+              )
+            } else {
+              console.error('Unexpected response:', response)
+            }
+          })
+          .catch((error) => console.error('Error:', error))
+      }
     }
   }, [])
 
