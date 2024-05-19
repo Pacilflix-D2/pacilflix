@@ -80,7 +80,7 @@ const SeriesDetailModule = () => {
             <div className="flex justify-center gap-2">
               <Dialog open={openModalTonton} onOpenChange={setOpenModalTonton}>
                 <DialogTrigger>
-                  <Button>Tonton Film</Button>
+                  <Button>Tonton Series</Button>
                 </DialogTrigger>
                 <DialogContent className="flex flex-col gap-5">
                   <DialogHeader>
