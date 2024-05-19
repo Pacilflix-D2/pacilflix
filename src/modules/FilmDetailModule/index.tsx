@@ -114,10 +114,6 @@ const FilmDetailModule = () => {
                   </Button>
                 </DialogDescription>
               </DialogHeader>
-
-              <Button onClick={() => router.push('/downloads')}>
-                Tombol Menuju Daftar Unduhan
-              </Button>
             </DialogContent>
           </Dialog>
 
