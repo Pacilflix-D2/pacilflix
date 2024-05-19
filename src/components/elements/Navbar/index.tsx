@@ -101,7 +101,11 @@ const Navbar = () => {
           </Link>
         )}
 
-        {isAuthenticated && <Button onClick={logout}>Logout</Button>}
+        {isAuthenticated && (
+          <Link href="/login">
+            <Button onClick={logout}>Logout</Button>
+          </Link>
+        )}
       </div>
     </div>
   )
