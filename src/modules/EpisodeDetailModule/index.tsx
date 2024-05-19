@@ -5,6 +5,16 @@ import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Episode, EpisodeData, MainEpisode } from './interface'
+import { Slider } from '@/components/ui/slider'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { toast } from 'sonner'
 
 const EpisodeDetailModule = () => {
   const { idSeries, subJudulEpisode } = useParams<{
@@ -14,6 +24,10 @@ const EpisodeDetailModule = () => {
   const [episode, setEpisode] = useState<MainEpisode | null>(null)
   const [anotherEpisodes, setAnotherEpisodes] = useState<Episode[] | null>(null)
   const { customFetch, isAuthenticated } = useAuthContext()
+
+  const [progressNonton, setProgressNonton] = useState<number>(0)
+
+  const [openModalTonton, setOpenModalTonton] = useState<boolean>(false)
 
   useEffect(() => {
     customFetch<EpisodeData>(
@@ -38,7 +52,51 @@ const EpisodeDetailModule = () => {
             </h1>
 
             <div className="flex justify-center gap-2">
-              <Button>Tonton Episode</Button>
+              <Dialog open={openModalTonton} onOpenChange={setOpenModalTonton}>
+                <DialogTrigger>
+                  <Button>Tonton Episode</Button>
+                </DialogTrigger>
+                {episode && (
+                  <DialogContent className="flex flex-col gap-5">
+                    <DialogHeader>
+                      <DialogTitle>Tonton tayangan</DialogTitle>
+                      <DialogDescription className="flex flex-col gap-2">
+                        <p>Pura2 nonton aja :)</p>
+                        <Slider
+                          defaultValue={[progressNonton]}
+                          max={episode.durasi}
+                          step={1}
+                          onValueChange={(value: number[]) => {
+                            console.log(value)
+
+                            setProgressNonton(value[0])
+                          }}
+                        />
+                        <Button
+                          onClick={async () => {
+                            const response = await customFetch(
+                              `/api/series/${episode.id_series}/episodes/${episode.sub_judul}/`,
+                              {
+                                method: 'POST',
+                                isAuthorized: true,
+                                body: JSON.stringify({
+                                  watch_duration: progressNonton,
+                                }),
+                              }
+                            )
+
+                            toast(response.message)
+
+                            setOpenModalTonton(false)
+                          }}
+                        >
+                          Submit tonton
+                        </Button>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                )}
+              </Dialog>
             </div>
           </div>
 
@@ -70,7 +128,7 @@ const EpisodeDetailModule = () => {
 
               <div>
                 <strong>Durasi Episode: </strong>
-                {episode.durasi}
+                {episode.durasi} Menit
               </div>
 
               <div>

@@ -23,7 +23,6 @@ import {
 } from '@/components/ui/select'
 import { Favorite } from '../FavoritesModule/interface'
 import { toast } from 'sonner'
-import { Slider } from '@/components/ui/slider'
 
 const SeriesDetailModule = () => {
   const router = useRouter()
@@ -33,9 +32,7 @@ const SeriesDetailModule = () => {
   const { customFetch, isAuthenticated } = useAuthContext()
   const [favorites, setFavorites] = useState<Favorite[] | null>(null)
   const [chosenJudulFavorite, setChosenJudulFavorite] = useState<string>('')
-  const [progressNonton, setProgressNonton] = useState<number>(0)
 
-  const [openModalTonton, setOpenModalTonton] = useState<boolean>(false)
   const [openModalFavorite, setOpenModalFavorite] = useState<boolean>(false)
 
   const addFavorite = () => {
@@ -78,33 +75,6 @@ const SeriesDetailModule = () => {
             <h1 className="text-6xl font-bold">Judul: {series.judul}</h1>
 
             <div className="flex justify-center gap-2">
-              <Dialog open={openModalTonton} onOpenChange={setOpenModalTonton}>
-                <DialogTrigger>
-                  <Button>Tonton Series</Button>
-                </DialogTrigger>
-                <DialogContent className="flex flex-col gap-5">
-                  <DialogHeader>
-                    <DialogTitle>Tonton tayangan</DialogTitle>
-                    <DialogDescription className="flex flex-col gap-2">
-                      <p>Pura2 nonton aja :)</p>
-                      <Slider
-                        defaultValue={[progressNonton]}
-                        max={100}
-                        step={1}
-                        onChange={(event: React.FormEvent<HTMLDivElement>) => {
-                          console.log(event)
-
-                          setProgressNonton(0)
-                        }}
-                      />
-                      <Button onClick={() => setOpenModalTonton(false)}>
-                        Submit tonton
-                      </Button>
-                    </DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-
               <Dialog>
                 <DialogTrigger>
                   <Button>Unduh Tayangan</Button>

@@ -84,6 +84,24 @@ const FilmDetailModule = () => {
     }
   }, [openModalDownload])
 
+  useEffect(() => {
+    if (!openModalTonton) {
+      customFetch<FilmDetails>(`/api/film/${params.idFilm}/`, {
+        isAuthorized: isAuthenticated,
+      }).then((response) => setFilm(response.data))
+
+      customFetch<Review[]>(`/api/film/${params.idFilm}/reviews/`, {
+        isAuthorized: isAuthenticated,
+      }).then((response) => setReviews(response.data))
+
+      customFetch<Favorite[]>('/api/favorites/', {
+        isAuthorized: true,
+      }).then((response) => {
+        setFavorites(response.data)
+      })
+    }
+  }, [openModalTonton])
+
   return (
     <main className="py-28 grid grid-cols-1 gap-y-28">
       <div className="flex flex-col items-center gap-4">
@@ -94,27 +112,46 @@ const FilmDetailModule = () => {
             <DialogTrigger>
               <Button>Tonton Film</Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-5">
-              <DialogHeader>
-                <DialogTitle>Tonton tayangan</DialogTitle>
-                <DialogDescription className="flex flex-col gap-2">
-                  <p>Pura2 nonton aja :)</p>
-                  <Slider
-                    defaultValue={[progressNonton]}
-                    max={100}
-                    step={1}
-                    onChange={(event: React.FormEvent<HTMLDivElement>) => {
-                      console.log(event)
+            {film && (
+              <DialogContent className="flex flex-col gap-5">
+                <DialogHeader>
+                  <DialogTitle>Tonton tayangan</DialogTitle>
+                  <DialogDescription className="flex flex-col gap-2">
+                    <p>Pura2 nonton aja :)</p>
+                    <Slider
+                      defaultValue={[progressNonton]}
+                      max={film.durasi_film}
+                      step={1}
+                      onValueChange={(value: number[]) => {
+                        console.log(value)
 
-                      setProgressNonton(0)
-                    }}
-                  />
-                  <Button onClick={() => setOpenModalTonton(false)}>
-                    Submit tonton
-                  </Button>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
+                        setProgressNonton(value[0])
+                      }}
+                    />
+                    <Button
+                      onClick={async () => {
+                        const response = await customFetch(
+                          `/api/film/${film.id_tayangan}/`,
+                          {
+                            method: 'POST',
+                            isAuthorized: true,
+                            body: JSON.stringify({
+                              watch_duration: progressNonton,
+                            }),
+                          }
+                        )
+
+                        toast(response.message)
+
+                        setOpenModalTonton(false)
+                      }}
+                    >
+                      Submit tonton
+                    </Button>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            )}
           </Dialog>
 
           <Dialog open={openModalDownload} onOpenChange={setOpenModalDownload}>
