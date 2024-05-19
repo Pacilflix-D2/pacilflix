@@ -24,16 +24,21 @@ const SubscriptionBuyModule = ({
       .slice(0, 10)
 
     const newTransaction = {
-      packageName: selectedPackage.name,
+      packageName: selectedPackage.name.split(' ')[1],
       startDate,
       endDate,
       paymentMethod: selectedPaymentMethod,
       paymentDate: startDate,
       totalPayment: selectedPackage.price,
-      supportedDevices: selectedPackage.supportedDevices,
-      resolution: selectedPackage.resolution,
+    }
+
+    const newActiveSubscriptions = {
+      name: selectedPackage.name.split(' ')[1],
       price: selectedPackage.price,
-      name: selectedPackage.name,
+      resolution: selectedPackage.resolution,
+      supportedDevices: selectedPackage.supportedDevices,
+      startDate: startDate,
+      endDate: endDate,
     }
 
     customFetch('/api/subscriptions/buy/', {
@@ -47,15 +52,27 @@ const SubscriptionBuyModule = ({
             const latestTransaction = prevHistory[prevHistory.length - 1]
             const isOverdue = new Date(latestTransaction.endDate) < new Date()
 
+            let updatedHistory
             if (isOverdue) {
-              return [...prevHistory, newTransaction]
+              updatedHistory = [...prevHistory, newTransaction]
             } else {
-              return prevHistory.map((transaction, index) =>
+              updatedHistory = prevHistory.map((transaction, index) =>
                 index === prevHistory.length - 1 ? newTransaction : transaction
               )
             }
+
+            localStorage.setItem(
+              'transactionHistory',
+              JSON.stringify(updatedHistory)
+            )
+            return updatedHistory
           })
-          setActiveSubscriptions(newTransaction)
+
+          setActiveSubscriptions(newActiveSubscriptions)
+          localStorage.setItem(
+            'activeSubscriptions',
+            JSON.stringify(newActiveSubscriptions)
+          )
 
           setPaymentSuccess(true)
         } else {

@@ -47,12 +47,3 @@ export const availableSubscriptions = [
       .slice(0, 10),
   },
 ]
-
-export interface activeSubscription {
-  name: string
-  price: number
-  resolution: string
-  supportedDevices: string[]
-  startDate: string
-  endDate: string
-}
